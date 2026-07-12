@@ -71,18 +71,16 @@ const STORY = {
   // строки — используется generic.
   attackIntros: {
     appleRing: ["Яблоки смыкаются кольцом вокруг тебя..."],
-    randomApples: ["Алинси лезет в кадр..."],
-    appleColumns: ["Дети Алинси посыпались сверху дождём..."],
-    blasterBottles: ["Кто то потратил баллы на попить псыжа..."],
-    sunSpin: ["Солнце Медсана раскалено докрасна..."],
+    randomApples: ["Аксий разбрасывает яблоки во все стороны!"],
+    appleColumns: ["Яблоки посыпались сверху дождём..."],
+    blasterBottles: ["Аксий откупоривает бутылки..."],
+    sunSpin: ["Солнце Аксия раскалено докрасна..."],
     sunHeat: ["Воздух над ареной дрожит от зноя..."],
     vipRelease: ["Выпускаю випов..."],
-    appleWalls: ["Яблоки выстраиваются стеной..."],
-    bottleRush: ["Бутылки покатились прямо на тебя!"],
-    generic: ["В чате предложили что то новенькое..."],
+    generic: ["Аксий готовит новую атаку..."],
     // Показывается вместо обычной реплики, когда ближе к концу боя Аксий
     // запускает две атаки одновременно (см. COMBOABLE/difficultyStage в движке).
-    comboWarning: ["Насрём атаками что бы вообще ахуел", "Смертельная мясорубка из атак!"],
+    comboWarning: ["Аксий мешает атаки друг с другом — так злее!", "Аксий психует и запускает всё разом!"],
   },
 
   // ACT-опции разные для фазы 1 / фазы 2 / того, что после ухода Аксия
@@ -123,8 +121,8 @@ const STORY = {
 
   // limit — сколько раз можно использовать предмет за один бой (нет limit — без ограничений)
   items: [
-    { name: "Псыж", heal: 25, limit: 5, text: ["Ты выпил бутылку Псыжа.", "ХП восстановлено на 25, освежает..."] },
-    { name: "Ковёр синий", heal: 100, limit: 1, text: ["Ты укутался в синий ковёр с дачи бекфана.", "Пахнет его ножками... ХП восстановлено на 100."] }
+    { name: "Псыж", heal: 25, limit: 5, text: ["Ты используешь Псыж.", "ХП восстановлено на 25."] },
+    { name: "Ковёр синий", heal: 100, limit: 1, text: ["Ты укутался в синий ковёр.", "ХП восстановлено на 100."] }
   ],
 
   hurtLines: ["Аксий вздрагивает от удара.", "Прямое попадание!"],
@@ -151,7 +149,7 @@ const STORY = {
   concertFleeLines: [
     "Так... секунду...",
     "Ой, а я как раз насобирал донатов на билет...",
-    "На концерт MZLFF в Санкт-Петербурге!",
+    "На концерт МАЗЕЛОВА в Санкт-Петербурге!",
     "Живи, я побежал собирать вещи!"
   ],
 
@@ -160,7 +158,7 @@ const STORY = {
 
   // ---- Конец 2-й фазы: Аксий не побеждён и не пощажён — он просто уходит ----
   phase2LeaveLines: ["Знаешь..."],
-  phase2LeaveLines2: ["...забудь.", "Мне это всё надоело, я оффаю."],
+  phase2LeaveLines2: ["...забудь.", "Мне это всё надоело."],
   afterLeaveMissLine: ["Мимо."],
   afterLeaveBegLines: ["Ты умоляешь пустую стену.", "Стена, ожидаемо, не отвечает."],
   afterLeaveForbiddenLines: ["Ты кричишь в пустоту.", "Никто не откликается."],
@@ -169,10 +167,10 @@ const STORY = {
   // Последние слова Аксия и его "гибель", если довести ХП до 0 и добить,
   // не пощадив (вместо этого выбрать FIGHT ещё раз).
   deathSpeech: [
-    "Ох...",
+    "Так... даже это не помогло...",
     "Ладно, признаю — стрим всё равно почти закончился.",
     "Не забудьте зайти в чат после того, как... а, неважно.",
-    "Прощай."
+    "GG."
   ],
   deathCollapseLines: [
     "Из АКСИЯ высыпаются сотни Псыжей.",
@@ -189,7 +187,7 @@ const STORY = {
 
   // Сколько раз нужно задонатить в 1-й фазе, чтобы при попытке пощады
   // Аксий вместо "восстановления сил" просто сбежал на концерт.
-  donateFleeThreshold: 5,
+  donateFleeThreshold: 11,
 
   // ---- Список концовок для меню "КОНЦОВКИ" в главном меню ----
   // Пока концовка не открыта — в меню вместо name показывается "???", а
@@ -209,8 +207,8 @@ const STORY = {
 };
 
 // Атаки, из которых случайно выбирается "ещё что-нибудь" в цикле выше.
-// Все встречаются одинаково часто (включая випов и новую яблочную стену).
-const EXTRA_ATTACK_POOL = ["sunSpin", "sunHeat", "appleColumns", "vipRelease", "appleWalls"];
+// Все четыре встречаются одинаково часто (включая новую атаку с випами).
+const EXTRA_ATTACK_POOL = ["sunSpin", "sunHeat", "appleColumns", "vipRelease"];
 
 // Фаза 1, после первых 4 ходов (см. startEnemyTurn): дальше атака выбирается
 // случайно из этого взвешенного пула — у бутылок-бластеров шанс чуть выше.
@@ -226,7 +224,6 @@ const PHASE1_RANDOM_POOL = [
 const PHASE2_ATTACK_POOL = [
   { name: "frogTongue", weight: 2 },
   { name: "fishSwarm", weight: 2 },
-  { name: "bottleRush", weight: 2 },
   { name: "blasterBottles", weight: 1 },
   { name: "extraAttack", weight: 1 },
 ];
@@ -287,7 +284,6 @@ const ASSETS = {
     bossDamageTaken: "assets/boss_damage_taken.mp3", // звук получения урона БОССОМ
     crack: "assets/crack.mp3",             // смерть игрока, шаг 1: треск сердца (~0.5с)
     heartBreak: "assets/heart_shatter.mp3",// смерть игрока, шаг 2: сердце разбивается и разлетается (~1.62с)
-    songDead: "assets/song_dead.ogg",      // фоновая музыка на экране смерти (играет всю death-последовательность)
   }
 };
 
@@ -476,10 +472,6 @@ function triggerPlayerDeath(x, y){
   deathShards = null;
   state = "death_crack";
   sfx('crack'); // шаг 1: треск — сразу при входе в состояние
-  // фоновая музыка смерти — играет всю death-последовательность (крэк, разлом,
-  // пустота, ободряющая фраза, выбор), останавливается автоматически, когда
-  // игрок выбирает "Заново" (startBattle делает stopMusic) или "Меню" (playMusic('menuMusic'))
-  playMusic('songDead');
 }
 
 let textLines = [], textIdx = 0, textChar = 0, textTimer = 0, textMode = "system", textCb = null;
@@ -794,12 +786,12 @@ function difficultyStage(){
 }
 // Атаки, которые можно безопасно совмещать друг с другом на 2-й стадии.
 // appleRing сюда не входит — она только вступительная.
-const COMBOABLE = ["randomApples", "blasterBottles", "sunHeat", "sunSpin", "appleColumns", "vipRelease", "appleWalls"];
+const COMBOABLE = ["randomApples", "blasterBottles", "sunHeat", "sunSpin", "appleColumns", "vipRelease"];
 // В фазе 2 миксуем ОСТОРОЖНО (сам просил не перегибать с бластерами) — синюю
 // душу (frogTongue/fishSwarm) вообще не комбинируем ни с чем, чтобы гравитация
 // и свободный уворот не накладывались друг на друга. Остальные (старые)
 // атаки можно комбинировать — особенно под самый конец боя (stage 3).
-const COMBOABLE_PHASE2 = ["blasterBottles", "randomApples", "sunSpin", "sunHeat", "appleColumns", "vipRelease", "appleWalls"];
+const COMBOABLE_PHASE2 = ["blasterBottles", "randomApples", "sunSpin", "sunHeat", "appleColumns", "vipRelease"];
 
 // Собирает "виртуальную" атаку из нескольких обычных: у неё нет ключа в
 // ATTACKS, зато есть init/update/draw, которые просто вызывают все под-атаки
@@ -809,9 +801,7 @@ function buildComboAttack(names, presets){
     duration: Math.max(...names.map(n=>ATTACKS[n].duration)),
     init(data, box){
       data.subs = names.map(n=>{
-        // isCombo — флаг для под-атак, которые ведут себя иначе в комбо (напр.
-        // blasterBottles: в комбо луч бьёт как раньше, соло — без кулдауна)
-        const sub = { name:n, data: Object.assign({isCombo:true}, (presets && presets[n]) || {}) };
+        const sub = { name:n, data: Object.assign({}, (presets && presets[n]) || {}) };
         const def = ATTACKS[n];
         if(def.init) def.init(sub.data, box);
         return sub;
@@ -908,22 +898,14 @@ function runAttack(name, silent, presetData){
   attackData = {};
   soul.x = box.x+box.w/2; soul.y = box.y+box.h/2; soul.invul = 0;
   soul.vy = 0; soul.grounded = true; soul.onPlatform = false;
-  // Атака с солнцем и лучами: чтобы душа не оказалась ровно в центре
-  // (и не получила урон от луча сразу же), ставим её чуть ниже центра.
-  const namesInPlay = name.indexOf("combo:")===0 ? name.slice(6).split("+") : [name];
-  if(namesInPlay.indexOf("sunSpin")!==-1){
-    soul.y = Math.min(box.y+box.h-soul.size-4, box.y+box.h/2 + 22);
-  }
   const def = resolveAttackDef(name, presetData||{});
   currentAttackDef = def;
   // для обычных (не составных) атак сохраняем старое поведение — preset
   // кладётся прямо в attackData, чтобы init() мог его прочитать (напр. count)
   if(name.indexOf("combo:")!==0) attackData = Object.assign({}, presetData||{});
+  attackDuration = def.duration;
   attackTimer = 0;
   if(def.init) def.init(attackData, box);
-  // некоторые атаки (соло-бластеры) сами решают свою длительность в init()
-  // и кладут её в attackData.duration — иначе берём статичную def.duration
-  attackDuration = (attackData && attackData.duration) || def.duration;
   state = "dodge";
 }
 
@@ -1088,20 +1070,12 @@ const ATTACKS = {
   // предупреждающего огонька) -> 2 сек стреляют лучом. Расставлены равномерно
   // по кругу вокруг коробки уворота.
   blasterBottles: {
-    duration: 8.0, // дефолт для комбо-атак (5 наведение + 1 пауза + 2 выстрел) — не меняется
+    duration: 8.0, // 5 (наведение) + 1 (пауза) + 2 (выстрел)
     init(data, box){
       data.appeared = false;
-      if(data.isCombo){
-        // в комбо-атаках псыж-бластеры остаются без изменений по времени
-        data.trackSeconds = 5.0;
-      } else {
-        // соло-атака — быстрее и с рандомным временем прицеливания (2-5 сек)
-        const options = [2, 3, 4, 5];
-        data.trackSeconds = options[Math.floor(Math.random()*options.length)];
-      }
+      data.trackSeconds = 5.0;
       data.waitSeconds = 1.0;   // было 3.0 — слишком долгое ожидание после прицела
       data.fireSeconds = 2.0;
-      data.duration = data.trackSeconds + data.waitSeconds + data.fireSeconds;
 
       const count = Math.max(2, data.count || 2); // сколько бластеров в этот раз
       const m = 90; // отступ от коробки наружу
@@ -1133,33 +1107,17 @@ const ATTACKS = {
         data.firedSound = true;
         sfx('blaster2');
       }
-      // урон от струи — только во время фазы выстрела.
-      // Соло-атака (не комбо): луч без кулдауна неуязвимости — тикает каждые
-      // 0.1с и снимает 1 ХП, пока душа в луче. В комбо — старое поведение
-      // (dealHit с обычной неуязвимостью ~0.9с после удара).
+      // урон от струи — только во время фазы выстрела
       if(data.t >= fireStart){
-        let inAnyBeam = false;
         data.blasters.forEach(b=>{
           const len = 650, width = 22;
           const dx = soul.x-b.x, dy = soul.y-b.y;
           const local_x = dx*Math.cos(-b.angle) - dy*Math.sin(-b.angle);
           const local_y = dx*Math.sin(-b.angle) + dy*Math.cos(-b.angle);
           if(local_x>=0 && local_x<=len && Math.abs(local_y)<=width/2){
-            inAnyBeam = true;
+            dealHit(1);
           }
         });
-        if(inAnyBeam){
-          if(data.isCombo){
-            dealHit(1);
-          } else {
-            data.tickTimer = (data.tickTimer||0) - dt;
-            if(data.tickTimer <= 0){
-              data.tickTimer = 0.1;
-              player.hp = Math.max(0, player.hp-1);
-              sfx('hurt');
-            }
-          }
-        }
       }
     },
     draw(ctx, data){
@@ -1355,37 +1313,6 @@ const ATTACKS = {
     draw(){}
   },
 
-  // === Атака: яблочные стены — яблоки едут стеной слева или справа, с
-  // проёмом, который каждый раз в новом месте по высоте. Нужно заранее
-  // встать напротив проёма, пока стена не докатилась. Проще ринга/дождя, но
-  // держит в напряжении, потому что проём не виден заранее издалека ===
-  appleWalls: {
-    duration: 6.5,
-    init(data, box){ data.timer = 0.5; },
-    update(dt, data, box, soul, dealHit){
-      data.timer -= dt;
-      if(data.timer <= 0){
-        data.timer = 0.95 + Math.random()*0.45;
-        const gapY = box.y + 26 + Math.random()*(box.h-52);
-        const gapH = 68;
-        const fromLeft = Math.random()<0.5;
-        const speed = 190 + Math.random()*50;
-        const spacing = 32;
-        const n = Math.ceil(box.h/spacing)+2;
-        for(let i=0;i<n;i++){
-          const y = box.y - 10 + i*spacing;
-          if(Math.abs(y-gapY) < gapH/2) continue; // тут проём — яблоко не ставим
-          const x = fromLeft ? box.x-24 : box.x+box.w+24;
-          bullets.push({ kind:"sprite", img: appleImgByRandom(), x, y,
-            vx: (fromLeft?1:-1)*speed, vy:0, size: SETTINGS.appleSize });
-        }
-      }
-      bullets.forEach(b=>{ b.x+=b.vx*dt; b.y+=b.vy*dt; });
-      bullets = bullets.filter(b=> b.x>-40 && b.x<W+40);
-    },
-    draw(){}
-  },
-
   // === Атака 8 (фаза 2, синяя душа): лягушка на языках-платформах ===
   // Лягушка сидит наверху коробки. Периодически "выстреливает" языком —
   // розовой прямоугольной платформой — в случайную точку внизу; пока язык
@@ -1517,78 +1444,6 @@ const ATTACKS = {
       });
     }
   },
-
-  // === Атака 10 (фаза 2, синяя душа): бутылки-вагонетки едут по полу ===
-  // Два типа: широкие "платформы" (на них можно запрыгнуть и прокатиться
-  // сверху — они безопасны, если стоять на крыше) и узкие быстрые "низкие"
-  // бутылки, которые нужно перепрыгивать, не касаясь. Едут то слева, то
-  // справа — задача в духе "паркура": вовремя запрыгнуть на платформу и
-  // спрыгнуть с неё, пока не докатилась до стены.
-  bottleRush: {
-    duration: 11.0,
-    blueSoul: true,
-    init(data, box){
-      data.t = 0;
-      data.spawnTimer = 0.9;
-      data.carts = [];
-    },
-    update(dt, data, box, soul, dealHit){
-      data.t += dt;
-      data.spawnTimer -= dt;
-      if(data.spawnTimer <= 0){
-        const isPlatform = Math.random() < 0.55;
-        const fromLeft = Math.random() < 0.5;
-        const h = isPlatform ? (30 + Math.random()*12) : (12 + Math.random()*6);
-        const w = isPlatform ? (72 + Math.random()*28) : (30 + Math.random()*14);
-        const speed = (isPlatform ? 100 : 195) + Math.random()*40;
-        data.carts.push({
-          x: fromLeft ? box.x - w : box.x + box.w + w,
-          w, h,
-          vx: (fromLeft?1:-1)*speed,
-          isPlatform
-        });
-        data.spawnTimer = isPlatform ? (1.7 + Math.random()*0.7) : (1.0 + Math.random()*0.6);
-      }
-
-      data.carts.forEach(c=> c.x += c.vx*dt);
-      data.carts = data.carts.filter(c=> c.x > box.x - c.w*1.5 - 40 && c.x < box.x + box.w + c.w*1.5 + 40);
-
-      // толстые вагоны регистрируются как платформы — на них можно приземлиться
-      // (используется общей физикой гравитации в update(), см. attackData.platforms)
-      data.platforms = data.carts.filter(c=>c.isPlatform).map(c=>({
-        x: c.x, y: box.y+box.h - c.h, w: c.w, h: 10
-      }));
-
-      // урон: если душа задевает вагон сбоку/снизу, а не стоит на его крыше
-      const soulBottom = soul.y + soul.size;
-      const soulLeft = soul.x - soul.size*0.7, soulRight = soul.x + soul.size*0.7;
-      data.carts.forEach(c=>{
-        const cTop = box.y+box.h - c.h, cLeft = c.x - c.w/2, cRight = c.x + c.w/2;
-        const overlapX = soulRight > cLeft && soulLeft < cRight;
-        const overlapY = soulBottom > cTop + 4;
-        const standingOnTop = soul.onPlatform && Math.abs(soulBottom - cTop) < 6;
-        if(overlapX && overlapY && !standingOnTop){
-          dealHit(3);
-        }
-      });
-    },
-    draw(ctx, data){
-      const img = IMG.blaster;
-      data.carts.forEach(c=>{
-        const cTop = box.y+box.h - c.h;
-        if(img && img.naturalWidth){
-          ctx.save();
-          ctx.translate(c.x, cTop + c.h/2);
-          if(c.vx < 0) ctx.scale(-1,1);
-          ctx.drawImage(img, -c.w/2, -c.h/2, c.w, c.h);
-          ctx.restore();
-        } else {
-          ctx.fillStyle = c.isPlatform ? "#7fd6ff" : "#ff8a5c";
-          ctx.fillRect(c.x-c.w/2, cTop, c.w, c.h);
-        }
-      });
-    }
-  },
 };
 
 /* =========================================================================
@@ -1667,14 +1522,10 @@ function update(dt){
         if(b.kind==="sprite"){
           const rApple = b.size*0.34, rSoul = soul.size*0.55;
           if(Math.hypot(b.x-soul.x, b.y-soul.y) < rApple+rSoul){
-            dealHit(5);
-            // яблоко (в отличие от вип-шаров) пропадает при касании души
-            if(b.tag !== "vip") b.dead = true;
-            break;
+            dealHit(5); break;
           }
         }
       }
-      if(bullets.some(b=>b.dead)) bullets = bullets.filter(b=>!b.dead);
     }
 
     const def = currentAttackDef;
@@ -1807,9 +1658,6 @@ function drawMainMenu(){
   ctx.fillStyle=WHITE;
   ctx.font="26px 'Press Start 2P'";
   ctx.fillText("БЕКТЕЙЛФАН", W/2, 130);
-  ctx.font="11px 'Press Start 2P'";
-  ctx.fillStyle=ACCENT;
-  ctx.fillText("БЕТА-ВЕРСИЯ", W/2, 158);
   const unlockedCount = STORY.endings.filter(e=>unlockedEndings[e.id]).length;
   const opts=["ИГРАТЬ","ПОДРОБНЕЕ","КОНЦОВКИ "+unlockedCount+"/"+STORY.endings.length];
   opts.forEach((o,i)=>{
@@ -1871,17 +1719,6 @@ function drawDetails(){
   });
   ctx.fillStyle=WHITE;
   ctx.fillText("Z — переключить · X — назад", 60, toggleY+34+rows.length*28+26);
-
-  // ---- пояснение про бета-статус игры ----
-  const infoY = toggleY+34+rows.length*28+58;
-  ctx.font="12px 'Press Start 2P'"; ctx.fillStyle=ACCENT;
-  ctx.fillText("О БЕТА-ВЕРСИИ", 60, infoY);
-  ctx.font="10px 'Press Start 2P'"; ctx.fillStyle=WHITE;
-  wrapText(
-    "Это бета-версия игры. В будущем на основе этого проекта планируется " +
-    "разработать отдельную полноценную игру, а не веб-приложение.",
-    60, infoY+24, 520, 17
-  );
 }
 
 function drawBox(){ ctx.strokeStyle=WHITE; ctx.lineWidth=4; ctx.strokeRect(box.x,box.y,box.w,box.h); }
